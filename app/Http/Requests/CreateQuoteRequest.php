@@ -25,10 +25,9 @@ class CreateQuoteRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'content'=> 'required',
-            'author'=> 'required',
-            'category_id' => 'required'
-        
+            'content'=> 'required|string',
+            'author'=> 'required|string',
+            'category_id'=>'required|integer|exists:categories,id'
         ];
     }
 

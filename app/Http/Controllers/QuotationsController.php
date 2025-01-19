@@ -83,7 +83,7 @@ class QuotationsController extends Controller
 
             $quotation->content = $request->content;
             $quotation->author = $request->author;
-            $quotation->category_id = $request->category_Id;
+            $quotation->category_id = $request->category_id;
 
             $quotation->save();
 
@@ -119,7 +119,7 @@ class QuotationsController extends Controller
 
             $quotation->content = $request->content;
             $quotation->author = $request->author;
-            $quotation->category_id = $request->category_Id;
+            $quotation->category_id = $request->category_id;
 
             $quotation->save();
 
