@@ -15,10 +15,14 @@ class QuotationsController extends Controller
     public function index()
     {
         try {
-            $quotation = Quotations::join('categories', 'categories.id', '=', 'quotations.category_id')
+            $quotations = Quotations::join('categories', 'categories.id', '=', 'quotations.category_id')
                 ->get(['quotations.id', 'quotations.content', 'quotations.author', 'categories.type']);
 
-            return response()->json($quotation);
+            return response()->json([
+                'status_code' => 200,
+                'status_message' => 'La liste des citations a été récupérée',
+                'data' => $quotations
+            ]);
         } catch (Exception $e) {
             return response()->json($e);
         }
@@ -27,27 +31,14 @@ class QuotationsController extends Controller
     public function paginateQuotations(Request $request)
     {
         try {
-            
-            $query = Quotations::query();
-            $perpage = 9;
-            $page = $request->input('page', 1);
-            $search = $request -> input('search');
-    
-            if ($search) {
-               $query->whereRaw("theme LIKE '%" . $search ."%'");
-            }
-    
-            $total = $query->count();
-    
-            $result = $query ->offset(($page -1) *$perpage) ->limit($perpage)
-            ->get();
 
-            return response()->json ([
-                'status_code'=> 200,
-                'current_page' => $page,
-                'last_page'=> ceil($total / $perpage),
-                'items' => $result
-            ]);
+            $perpage = $request->input('perPage', 9);
+
+            $quotations = Quotations::join('categories', 'categories.id', '=', 'quotations.category_id')
+                ->select(['quotations.content', 'quotations.author', 'categories.type'])
+                ->paginate($perpage);
+
+            return response()->json($quotations);
         } catch (Exception $e) {
             return response()->json($e);
         }
@@ -64,7 +55,7 @@ class QuotationsController extends Controller
         }
     }
 
-    
+
 
     /**
      * Show the form for creating a new resource.
