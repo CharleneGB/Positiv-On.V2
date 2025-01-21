@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\CreateQuoteRequest;
 use App\Http\Requests\EditQuotationRequest;
+use App\Models\Category;
 use App\Models\Quotations;
 use Exception;
 use Illuminate\Http\Request;
@@ -45,11 +46,25 @@ class QuotationsController extends Controller
     }
 
 
-    public function fetchQuotationsByType($id)
+    public function getByCategory(Request $request, $category)
     {
         try {
-            $categoryId = Quotations::where('category_id', $id)->get();
-            return response()->json($categoryId);
+            $perpage = $request->input('perpage', 3);
+
+            $validCategory = Category::where('type', $category)->exists();
+            if (!$validCategory) {
+                return response()->json([
+                    'status.code' => 404,
+                    'status.message' => 'Cette catégorie n\'existe pas.'
+                ]);
+            }
+
+            $quotations = Quotations::join('categories', 'categories.id', '=', 'quotations.category_id')
+                ->select(['quotations.content', 'quotations.author', 'categories.type'])
+                ->paginate($perpage);
+
+
+            return response()->json($quotations);
         } catch (Exception $e) {
             return response()->json($e);
         }

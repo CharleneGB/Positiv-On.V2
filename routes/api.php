@@ -19,6 +19,7 @@ use Illuminate\Routing\Route as RoutingRoute;
 Route::get('/citations', [QuotationsController::class, 'index']);
 /* Route::get('citation/{id}',[QuotationsController::class, 'show']); */
 Route::get('/citations/paginer', [QuotationsController::class,'paginateQuotations']);
+Route::get('/citations/{catégorie}', [QuotationsController::class,'getByCategory']);
 Route::post('/citation/ajout',[QuotationsController::class, 'store']);
 Route::put('/citation/edit/{quotation}',[QuotationsController::class, 'update']);
 Route::delete('/citation/{quotation}',[QuotationsController::class, 'destroy']);
