@@ -61,7 +61,10 @@ class QuotationsController extends Controller
 
             $quotations = Quotations::join('categories', 'categories.id', '=', 'quotations.category_id')
                 ->select(['quotations.content', 'quotations.author', 'categories.type'])
+                ->where('categories.type', $category)
                 ->paginate($perpage);
+                
+          
 
 
             return response()->json($quotations);
@@ -71,6 +74,34 @@ class QuotationsController extends Controller
     }
 
 
+    public function show (Request $request, $id){
+
+        try {
+            $display = $request->input($id);
+
+            $validId = Quotations::where('id', $id)->exists();
+            if (!$validId) {
+                return response()->json([
+                    'status.code' => 404,
+                    'status.message' => 'Cette citation n\'existe pas.'
+                ]);
+            }
+            $quotation = Quotations::find($id);
+
+            return  response()->json([
+                'status.code' => 200,
+                'status.message' => 'La citation a été récupérée',
+                'data' => $quotation
+
+            ]);
+        } catch (Exception $e) {
+        
+            return response()->json($e);
+        }
+
+
+
+    }
 
     /**
      * Show the form for creating a new resource.
