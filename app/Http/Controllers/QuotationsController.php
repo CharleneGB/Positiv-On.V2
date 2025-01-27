@@ -126,7 +126,7 @@ class QuotationsController extends Controller
 
             return response()->json([
                 'status_code' => 200,
-                'status_message' => 'La citation a été enregistrée',
+                'status_message' => 'La nouvelle citation a été enregistrée',
                 'data' => $quotation
             ]);
         } catch (Exception $e) {
