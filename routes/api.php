@@ -3,6 +3,7 @@
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\QuotationsController;
+use App\Http\Controllers\UserController;
 use Illuminate\Routing\Route as RoutingRoute;
 
 /*
@@ -26,6 +27,8 @@ Route::put('/citation/edit/{quotation}',[QuotationsController::class, 'update'])
 Route::delete('/citation/{quotation}',[QuotationsController::class, 'destroy']);
 
 
+Route::post('/inscription',[UserController::class, 'register']);
+Route::post('/connexion', [UserController::class, 'login']);
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
